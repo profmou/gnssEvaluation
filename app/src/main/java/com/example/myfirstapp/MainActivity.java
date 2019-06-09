@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import android.support.v7.app.AppCompatActivity;
@@ -64,6 +65,11 @@ public class MainActivity extends AppCompatActivity {
                  Log.i(TAG, "经度：" + location.getLongitude());
                  Log.i(TAG, "纬度：" + location.getLatitude());
                  Log.i(TAG, "海拔：" + location.getAltitude());
+                 TextView textView = findViewById(R.id.textView2);
+                 textView.setText("时间：" + location.getTime() + "\n" +
+                         "经度" + location.getLongitude() + "\n" +
+                         "纬度：" + location.getLatitude() + "\n" +
+                         "海拔：" + location.getAltitude());
              }
 
              /**
@@ -126,14 +132,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void sendMessage(View view) {
-                //Do something in response to button
-                Intent intent = new Intent(this, DisplayMessageActivity.class);
-                EditText editText = (EditText) findViewById(R.id.editText);
-                String message = editText.getText().toString();
-                intent.putExtra(EXTRA_MESSAGE, message);
-                startActivity(intent);
-        }
+     /*   public void sendMessage(View view) {
+                    //Do something in response to button
+                    //Intent intent = new Intent(this, DisplayMessageActivity.class);
+                    EditText editText = (EditText) findViewById(R.id.editText);
+                    String message = editText.getText().toString();
 
+                    //intent.putExtra(EXTRA_MESSAGE, message);
+                    //Criteria criteria = new Criteria();
+                    //String bestProvider = lm.getBestProvider(criteria, true);
+                    //Location location = lm.getLastKnownLocation(bestProvider);
+                    //intent.putExtra(EXTRA_MESSAGE,location.getLongitude());
+                    //startActivity(intent);
+            }
+      */
 }
 
