@@ -8,12 +8,14 @@
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="275dp"
-        android:layout_height="109dp"
+        android:layout_width="301dp"
+        android:layout_height="601dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="8dp"
-        android:text="TextView"
+        android:layout_marginBottom="8dp"
+        android:text="等待定位"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>

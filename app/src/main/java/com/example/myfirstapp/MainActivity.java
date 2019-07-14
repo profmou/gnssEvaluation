@@ -66,10 +66,15 @@ public class MainActivity extends AppCompatActivity {
                  Log.i(TAG, "纬度：" + location.getLatitude());
                  Log.i(TAG, "海拔：" + location.getAltitude());
                  TextView textView = findViewById(R.id.textView2);
-                 textView.setText("时间：" + location.getTime() + "\n" +
+/*                 textView.setText("时间：" + location.getTime() + "\n" +
                          "经度" + location.getLongitude() + "\n" +
                          "纬度：" + location.getLatitude() + "\n" +
-                         "海拔：" + location.getAltitude());
+                         "海拔：" + location.getAltitude() + "\n" );*/
+                 textView.append("\n" + "时间：" + location.getTime() + "\n" +
+                         "经度" + location.getLongitude() + "\n" +
+                         "纬度：" + location.getLatitude() + "\n" +
+                         "海拔：" + location.getAltitude() + "\n" +
+                         "\n" );
              }
 
              /**
