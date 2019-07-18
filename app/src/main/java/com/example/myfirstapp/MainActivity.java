@@ -22,6 +22,10 @@ import android.support.v7.app.AppCompatActivity;
 
 import android.view.View;
 
+import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.CoordType;
+import com.baidu.mapapi.SDKInitializer;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,17 +35,33 @@ public class MainActivity extends AppCompatActivity {
     private LocationManager lm;
     private LocationListener locationListener;
 
+
+    private MapView mMapView = null;
+    private BaiduMap mBaiduMap = null;
+    private Context context;
+
     @Override
     protected void onDestroy() {
         // TODO Auto-generated method stub
         super.onDestroy();
         lm.removeUpdates(locationListener);
+
+        mBaiduMap.setMyLocationEnabled(false);
+        mMapView.onDestroy();
+        mMapView = null;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SDKInitializer.initialize(getApplicationContext());
         setContentView(R.layout.activity_main);
+        SDKInitializer.setCoordType(CoordType.BD09LL);
+        this.context = this;
+        mMapView = (MapView) findViewById(R.id.bmapView);
+        mBaiduMap = mMapView.getMap();
+
+
 
         lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -66,10 +86,15 @@ public class MainActivity extends AppCompatActivity {
                  Log.i(TAG, "纬度：" + location.getLatitude());
                  Log.i(TAG, "海拔：" + location.getAltitude());
                  TextView textView = findViewById(R.id.textView2);
-                 textView.setText("时间：" + location.getTime() + "\n" +
+/*                 textView.setText("时间：" + location.getTime() + "\n" +
                          "经度" + location.getLongitude() + "\n" +
                          "纬度：" + location.getLatitude() + "\n" +
-                         "海拔：" + location.getAltitude());
+                         "海拔：" + location.getAltitude());*/
+
+                 textView.append( "\n" +"时间：" + location.getTime() + "\n" +
+                         "经度" + location.getLongitude() + "\n" +
+                         "纬度：" + location.getLatitude() + "\n" +
+                         "海拔：" + location.getAltitude() + "\n" );
              }
 
              /**
@@ -129,6 +154,24 @@ public class MainActivity extends AppCompatActivity {
         // 1秒更新一次，或最小位移变化超过1米更新一次；
         //注意：此处更新准确度非常低，推荐在service里面启动一个Thread，在run中sleep(10000);然后执行handler.sendMessage(),更新位置
         lm.requestLocationUpdates(lm.GPS_PROVIDER, 1000, 1, locationListener);
+    }
+
+    protected void onStart() {
+        super.onStart();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mMapView.onResume();
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mMapView.onPause();
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 
 
