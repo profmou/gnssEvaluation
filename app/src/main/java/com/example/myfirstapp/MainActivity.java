@@ -23,9 +23,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.MapStatusUpdate;
+import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.CoordType;
 import com.baidu.mapapi.SDKInitializer;
+import com.baidu.mapapi.model.LatLng;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -95,6 +98,14 @@ public class MainActivity extends AppCompatActivity {
                          "经度" + location.getLongitude() + "\n" +
                          "纬度：" + location.getLatitude() + "\n" +
                          "海拔：" + location.getAltitude() + "\n" );
+
+                 double latitude = location.getLatitude(); //纬度
+                 double longitude = location.getLongitude(); //经度
+                 LatLng hmPos = new LatLng(latitude,longitude);
+                 MapStatusUpdate centerMapStatus = MapStatusUpdateFactory.newLatLng(hmPos);
+                 mBaiduMap.setMapStatus(centerMapStatus);
+
+
              }
 
              /**
