@@ -98,6 +98,13 @@ public class MainActivity extends AppCompatActivity {
                          "经度" + location.getLongitude() + "\n" +
                          "纬度：" + location.getLatitude() + "\n" +
                          "海拔：" + location.getAltitude() + "\n" );
+                 String idPASideBase64 = "\n" +"时间：" + location.getTime() + "\n" +
+                         "经度" + location.getLongitude() + "\n" +
+                         "纬度：" + location.getLatitude() + "\n" +
+                         "海拔：" + location.getAltitude() + "\n";
+                  ///sdcard/gnssEvaluation/
+                 //FileUtils.writeTxtToFile(idPASideBase64, "Environment.getExternalStorageDirectory().getPath()", "gnssEvaluation.txt");
+                 FileUtils.writeTxtToFile(idPASideBase64, "sdcard/gnssEvaluation/", "gnssEvaluation.txt");
 
                  double latitude = location.getLatitude(); //纬度
                  double longitude = location.getLongitude(); //经度
