@@ -64,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
         mMapView = (MapView) findViewById(R.id.bmapView);
         mBaiduMap = mMapView.getMap();
 
+        String stringWriteToFile = "lat,lon,alt\n" ;
+        FileUtils.writeTxtToFile(stringWriteToFile, "sdcard/gnssEvaluation/", "gnssEvaluation.txt");
 
 
         lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -98,13 +100,11 @@ public class MainActivity extends AppCompatActivity {
                          "经度" + location.getLongitude() + "\n" +
                          "纬度：" + location.getLatitude() + "\n" +
                          "海拔：" + location.getAltitude() + "\n" );
-                 String idPASideBase64 = "\n" +"时间：" + location.getTime() + "\n" +
-                         "经度" + location.getLongitude() + "\n" +
-                         "纬度：" + location.getLatitude() + "\n" +
-                         "海拔：" + location.getAltitude() + "\n";
+
+                 String stringWriteToFile =location.getLatitude() + "," + location.getLongitude() + "," + location.getAltitude() + "\n";
                   ///sdcard/gnssEvaluation/
                  //FileUtils.writeTxtToFile(idPASideBase64, "Environment.getExternalStorageDirectory().getPath()", "gnssEvaluation.txt");
-                 FileUtils.writeTxtToFile(idPASideBase64, "sdcard/gnssEvaluation/", "gnssEvaluation.txt");
+                 FileUtils.writeTxtToFile(stringWriteToFile, "sdcard/gnssEvaluation/", "gnssEvaluation.txt");
 
                  double latitude = location.getLatitude(); //纬度
                  double longitude = location.getLongitude(); //经度
