@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 //import java.net.InetAddress;
+import java.net.InetAddress;
 import java.net.Socket;
 
 public class MainActivity extends AppCompatActivity {
@@ -44,6 +45,9 @@ public class MainActivity extends AppCompatActivity {
     private LocationManager lm;
     private LocationListener locationListener;
 
+    private double Latitude_p;
+    private double Longitude_p;
+    private double time_p;
 
     private MapView mMapView = null;
     private BaiduMap mBaiduMap = null;
@@ -111,9 +115,30 @@ public class MainActivity extends AppCompatActivity {
                   ///sdcard/gnssEvaluation/
                  //FileUtils.writeTxtToFile(idPASideBase64, "Environment.getExternalStorageDirectory().getPath()", "gnssEvaluation.txt");
                  FileUtils.writeTxtToFile(stringWriteToFile, "sdcard/gnssEvaluation/", "gnssEvaluation.txt");
+                 Latitude_p = location.getLatitude();
+                 Longitude_p = location.getLongitude();
+                 time_p = location.getTime();
+//                 throws IOException {
+//                     //1.创建客户端Socket，指定服务器地址和端口
+//                     Socket socket = new Socket("106.13.21.39", 9999);
+//                     //2.获取输出流，向服务器端发送信息
+//                     OutputStream os = socket.getOutputStream();//字节输出流
+//                     PrintWriter pw = new PrintWriter(os);//将输出流包装为打印流
+//                     //获取客户端的IP地址
+//                     //InetAddress address = InetAddress.getLocalHost();
+//                     //String ip = address.getHostAddress();
+//                     pw.write("客户端：CXY~" + "测试网络" + "~ 接入服务器！！" + "\n" + "时间：" + location.getTime() + "\n" +
+//                             "经度" + location.getLongitude() + "\n" +
+//                             "纬度：" + location.getLatitude() + "\n" +
+//                             "海拔：" + location.getAltitude() + "\n");
+//                     pw.flush();
+//                     socket.shutdownOutput();//关闭输出流
+//                     socket.close();
+//                 }
 
                  double latitude = location.getLatitude(); //纬度
                  double longitude = location.getLongitude(); //经度
+
                  LatLng hmPos = new LatLng(latitude,longitude);
                  MapStatusUpdate centerMapStatus = MapStatusUpdateFactory.newLatLng(hmPos);
                  mBaiduMap.setMapStatus(centerMapStatus);
@@ -212,20 +237,26 @@ public class MainActivity extends AppCompatActivity {
         }.start();
     }
 
-    private void acceptServer() throws IOException {
-        //1.创建客户端Socket，指定服务器地址和端口
-        Socket socket = new Socket("106.13.21.39", 9999);
-        //2.获取输出流，向服务器端发送信息
-        OutputStream os = socket.getOutputStream();//字节输出流
-        PrintWriter pw = new PrintWriter(os);//将输出流包装为打印流
-        //获取客户端的IP地址
-        //InetAddress address = InetAddress.getLocalHost();
-        //String ip = address.getHostAddress();
-        pw.write("客户端：~" + "测试网络" + "~ 接入服务器！！");
-        pw.flush();
-        socket.shutdownOutput();//关闭输出流
-        socket.close();
-    }
+        private void acceptServer() throws IOException {
+            //1.创建客户端Socket，指定服务器地址和端口
+            Socket socket = new Socket("106.13.21.39", 9999);
+            //2.获取输出流，向服务器端发送信息
+            OutputStream os = socket.getOutputStream();//字节输出流
+            PrintWriter pw = new PrintWriter(os);//将输出流包装为打印流
+            //获取客户端的IP地址
+            //InetAddress address = InetAddress.getLocalHost();
+            //String ip = address.getHostAddress();
+            pw.write("客户端："  + " 接入服务器！！" + "\n" +
+                    "时间：" + time_p + "\n" +
+                    "经度: " + Longitude_p + "\n" +
+                    "纬度：" + Latitude_p + "\n");
+
+            pw.write("exit");
+
+            pw.flush();
+            socket.shutdownOutput();//关闭输出流
+            socket.close();
+        }
 
      /*   public void sendMessage(View view) {
                     //Do something in response to button
