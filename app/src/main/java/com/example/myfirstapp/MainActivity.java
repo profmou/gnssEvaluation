@@ -29,6 +29,7 @@ import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.CoordType;
 import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.utils.CoordinateConverter;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -139,8 +140,18 @@ public class MainActivity extends AppCompatActivity {
                  double latitude = location.getLatitude(); //纬度
                  double longitude = location.getLongitude(); //经度
 
-                 LatLng hmPos = new LatLng(latitude,longitude);
-                 MapStatusUpdate centerMapStatus = MapStatusUpdateFactory.newLatLng(hmPos);
+                 //将GPS设备采集的原始GPS坐标转换成百度坐标
+                 LatLng sourceLatLng = new LatLng(latitude,longitude);
+
+                 //初始化坐标转换工具类，指定源坐标类型和坐标数据
+                 // sourceLatLng待转换坐标
+                 CoordinateConverter converter  = new CoordinateConverter()
+                         .from(CoordinateConverter.CoordType.GPS)
+                         .coord(sourceLatLng);
+                 //desLatLng 转换后的坐标
+                 LatLng desLatLog = converter.convert();
+
+                 MapStatusUpdate centerMapStatus = MapStatusUpdateFactory.newLatLng(desLatLog);
                  mBaiduMap.setMapStatus(centerMapStatus);
 
 
