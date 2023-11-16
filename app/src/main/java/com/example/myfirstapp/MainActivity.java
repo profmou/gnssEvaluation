@@ -2,6 +2,7 @@ package com.example.myfirstapp;
 
 //import java.util.Iterator;
 //import android.app.Activity;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Criteria;
@@ -38,6 +39,12 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 
+//时间戳转换工具
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
+
 public class MainActivity extends AppCompatActivity {
 
     public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
@@ -54,6 +61,9 @@ public class MainActivity extends AppCompatActivity {
     private BaiduMap mBaiduMap = null;
     private Context context;
 
+    //存储实时数据，保留最近10条数据
+    private StringBuilder recentData = new StringBuilder(); //保存最近的10条数据信息
+
     @Override
     protected void onDestroy() {
         // TODO Auto-generated method stub
@@ -65,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
         mMapView = null;
     }
 
+    @SuppressLint("MissingPermission")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         mBaiduMap = mMapView.getMap();
 
         String stringWriteToFile = "lat,lon,alt\n" ;
-        FileUtils.writeTxtToFile(stringWriteToFile, "sdcard/gnssEvaluation/", "gnssEvaluation.txt");
+        FileUtils.writeTxtToFile(stringWriteToFile, "sdcard/gnssEvaluation/", "myGPSDataLog");
 
 
         lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -95,22 +106,69 @@ public class MainActivity extends AppCompatActivity {
              /**
               * 位置信息变化时触发
               */
+
              public void onLocationChanged(Location location) {
                  //updateView(location);
-                 Log.i(TAG, "时间：" + location.getTime());
+
+                 long timeStamp = location.getTime();
+
+                 // 将时间戳转换为日期对象
+                 Date date = new Date(timeStamp);
+
+                 // 设置日期格式
+                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日HH点mm分", Locale.getDefault());
+                 sdf.setTimeZone(TimeZone.getDefault()); // 设置时区为本地时区
+
+                 // 格式化日期对象并输出到Log
+                 String formattedDate = sdf.format(date);
+                 Log.i(TAG, "时间：" + formattedDate);
+//                 Log.i(TAG, "时间：" + location.getTime());
                  Log.i(TAG, "经度：" + location.getLongitude());
                  Log.i(TAG, "纬度：" + location.getLatitude());
                  Log.i(TAG, "海拔：" + location.getAltitude());
+
+//                 TextView textView = findViewById(R.id.textView2);
                  TextView textView = findViewById(R.id.textView2);
 /*                 textView.setText("时间：" + location.getTime() + "\n" +
                          "经度" + location.getLongitude() + "\n" +
                          "纬度：" + location.getLatitude() + "\n" +
                          "海拔：" + location.getAltitude());*/
 
-                 textView.append( "\n" +"时间：" + location.getTime() + "\n" +
-                         "经度" + location.getLongitude() + "\n" +
+//                 textView.append( "\n" +"时间：" + location.getTime() + "\n" +
+//                         "经度" + location.getLongitude() + "\n" +
+//                         "纬度：" + location.getLatitude() + "\n" +
+//                         "海拔：" + location.getAltitude() + "\n" );
+                 String newEntry = "时间：" + formattedDate + "\n" +
+                         "经度：" + location.getLongitude() + "\n" +
                          "纬度：" + location.getLatitude() + "\n" +
-                         "海拔：" + location.getAltitude() + "\n" );
+                         "海拔：" + location.getAltitude() + "\n\n";
+
+                 // 将新数据添加到字符串变量中
+                 recentData.append(newEntry);
+
+                 // 检查最近的数据条数是否超过10条，如果超过则删除最旧的数据
+                 int lineCount = textView.getLayout().getLineCount();
+                 if (lineCount > 10) {
+                     int startOffset = textView.getLayout().getLineStart(0);
+                     int endOffset = textView.getLayout().getLineEnd(lineCount - 10);
+                     recentData.delete(startOffset, endOffset);
+                 }
+
+                 // 更新 TextView 中的文本内容
+                 textView.setText(recentData.toString());
+
+                 final TextView finalTextView = textView;
+                 textView.post(new Runnable() {
+                     @Override
+                     public void run() {
+                         int scrollAmount = finalTextView.getLayout().getLineTop(finalTextView.getLineCount()) - finalTextView.getHeight();
+                         if (scrollAmount > 0) {
+                             finalTextView.scrollTo(0, scrollAmount);
+                         } else {
+                             finalTextView.scrollTo(0, 0);
+                         }
+                     }
+                 });
 
                  String stringWriteToFile =location.getLatitude() + "," + location.getLongitude() + "," + location.getAltitude() + "\n";
                   ///sdcard/gnssEvaluation/
@@ -181,7 +239,7 @@ public class MainActivity extends AppCompatActivity {
               * GPS开启时触发
               */
              public void onProviderEnabled(String provider) {
-                 Location location = lm.getLastKnownLocation(provider);
+                 @SuppressLint("MissingPermission") Location location = lm.getLastKnownLocation(provider);
                  //updateView(location);
              }
 
@@ -199,7 +257,7 @@ public class MainActivity extends AppCompatActivity {
 
         //获取位置信息
         //如果不设置查询要求，getLastKnownLocation方法传人的参数为LocationManager.GPS_PROVIDER
-        Location location = lm.getLastKnownLocation(bestProvider);
+        @SuppressLint("MissingPermission") Location location = lm.getLastKnownLocation(bestProvider);
         //updateView(location);
         //监听状态
         //lm.addGpsStatusListener(listener);
