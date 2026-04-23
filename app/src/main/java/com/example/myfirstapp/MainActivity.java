@@ -2,9 +2,11 @@ package com.example.myfirstapp;
 
 //import java.util.Iterator;
 //import android.app.Activity;
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Criteria;
 //import android.location.GpsSatellite;
 //import android.location.GpsStatus;
@@ -19,7 +21,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.view.View;
 
@@ -79,6 +82,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // 启动前检查关键权限，缺失则跳转到权限请求页面
+        if (!hasRequiredPermissions()) {
+            Intent permIntent = new Intent(this, PermissionActivity.class);
+            startActivity(permIntent);
+            finish();
+            return;
+        }
+
         SDKInitializer.initialize(getApplicationContext());
         setContentView(R.layout.activity_main);
         SDKInitializer.setCoordType(CoordType.BD09LL);
@@ -100,8 +112,8 @@ public class MainActivity extends AppCompatActivity {
             startActivityForResult(intent, 0);
             return;
         }
-        //位置监听 private
-         LocationListener locationListener = new LocationListener() {
+        //位置监听
+         locationListener = new LocationListener() {
 
              /**
               * 位置信息变化时触发
@@ -341,5 +353,25 @@ public class MainActivity extends AppCompatActivity {
                     //startActivity(intent);
             }
       */
+
+    /**
+     * 检查应用是否有运行所需的关键权限
+     * @return true 表示权限齐全，false 表示缺少权限
+     */
+    private boolean hasRequiredPermissions() {
+        // 检查位置权限
+        boolean hasLocation = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED;
+        // 检查存储权限
+        boolean hasStorage;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            // Android 13+ 不需要存储权限即可写入外部存储
+            hasStorage = true;
+        } else {
+            hasStorage = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED;
+        }
+        return hasLocation && hasStorage;
+    }
 }
 

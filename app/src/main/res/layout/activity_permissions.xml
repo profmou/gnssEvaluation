@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="32dp"
+    android:background="@color/colorPrimaryDark">
+
+    <ImageView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginBottom="24dp"
+        android:src="@mipmap/ic_launcher_round" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="权限请求"
+        android:textSize="24sp"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="本应用需要以下权限才能正常运行："
+        android:textSize="16sp"
+        android:textColor="#DDDDDD"
+        android:layout_marginBottom="24dp" />
+
+    <!-- 位置权限 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="12dp"
+        android:layout_marginBottom="8dp"
+        android:background="#33FFFFFF">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="📍"
+            android:textSize="24sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="位置权限"
+                android:textSize="16sp"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="用于获取GPS定位数据并记录位置信息"
+                android:textSize="13sp"
+                android:textColor="#BBBBBB" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/iv_location_status"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@android:drawable/ic_menu_close_clear_cancel" />
+    </LinearLayout>
+
+    <!-- 存储权限 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="12dp"
+        android:layout_marginBottom="32dp"
+        android:background="#33FFFFFF">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="📁"
+            android:textSize="24sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="存储读写权限"
+                android:textSize="16sp"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="用于将GPS数据保存到本地文件中"
+                android:textSize="13sp"
+                android:textColor="#BBBBBB" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/iv_storage_status"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@android:drawable/ic_menu_close_clear_cancel" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_permission_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="请点击下方按钮授予权限"
+        android:textSize="14sp"
+        android:textColor="#FF6666"
+        android:visibility="gone"
+        android:layout_marginBottom="16dp" />
+
+    <Button
+        android:id="@+id/btn_request_permissions"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="授予权限"
+        android:textSize="18sp"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#4CAF50"
+        android:layout_marginBottom="16dp" />
+
+    <Button
+        android:id="@+id/btn_go_settings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="前往系统设置开启权限"
+        android:textSize="14sp"
+        android:textColor="#AAAAAA"
+        android:backgroundTint="#00000000"
+        android:visibility="gone" />
+
+</LinearLayout>
